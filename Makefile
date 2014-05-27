@@ -4,13 +4,19 @@
 #
 all:	blink.elf blink.ld
 
-CFLAGS = -mcpu=cortex-m4 -mthumb
+CFLAGS = -mcpu=cortex-m4 -mthumb -g
+LDFLAGS = -Wl,-T,blink.ld,-Map,blink.map
 
-startup.o: startup.s
-	arm-none-eabi-as $(CFLAGS) -o startup.o startup.s
+all:	blink.elf
 
-blink.elf:	blink.c startup.o
-	arm-none-eabi-gcc $(CFLAGS) -g -o blink.elf -Wl,-T,blink.ld,-Map,blink.map blink.c startup.o
+startup.o: startup_ARMCM4.S
+	arm-none-eabi-as $(CFLAGS) -o startup.o $<
+
+blink.o: blink.c
+	arm-none-eabi-gcc $(CFLAGS) -c blink.c
+
+blink.elf:	blink.o blink.c startup.o
+	arm-none-eabi-gcc $(LDFLAGS) -o blink.elf blink.o startup.o
 
 clean:
-	rm blink.elf startup.o blink.map
+	rm *.o blink.elf blink.map

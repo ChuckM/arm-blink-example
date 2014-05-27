@@ -25,6 +25,8 @@ void _exit(int r) {
 	}
 }
 
+int delay_time = 100000;
+
 void
 main() {
 	int i;
@@ -33,18 +35,17 @@ main() {
 	GPIOD_MODE = 0x55000000; // Bits 15 - 12 all output
 	while (1) {
 		GPIOD_OUT = 0xa000;	// two LEDs on
-		for (i = 0; i < 100000; i++) {
+		for (i = 0; i < delay_time; i++) {
 			asm("nop");
 		}
 		GPIOD_OUT = 0x5000; // other two LEDs on
-		for (i = 0; i < 100000; i++) {
+		for (i = 0; i < delay_time; i++) {
 			asm("nop");
 		}
 	}
 }	
 
-void Reset_Handler() {
-	/* This is where we are first */
+void 
+SystemInit() {
 	main();
 }
-
