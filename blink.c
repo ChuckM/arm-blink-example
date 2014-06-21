@@ -25,7 +25,7 @@ void _exit(int r) {
 	}
 }
 
-int delay_time = 100000;
+int delay_time = 250000;
 
 void
 main() {
